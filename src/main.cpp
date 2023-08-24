@@ -7,6 +7,8 @@
 #include "front/include/parser.hpp"
 #include "front/include/lexer.hpp"
 
+#include "codegen/x86_64/include/x86_64_context.hpp"
+
 int main(int argc, char *argv[]) {
   std::string src = Utilities::readSrc("examples/add.bhpl");
 
@@ -15,6 +17,8 @@ int main(int argc, char *argv[]) {
 
   auto *parser = new Frontend::Parser(tokens);
   auto tree = parser->getTree();
+
+  auto *ctx = new Codegen::X86Context(tree);
 
   return 0;
 }

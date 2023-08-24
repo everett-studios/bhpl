@@ -5,7 +5,8 @@ project(bhc VERSION 0.1)
 set(CMAKE_CXX_STANDARD 17) # IMPORTANT!
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
+set(X86_SRCS src/codegen/x86_64/x86_64_context.cpp)
 set(FRONTEND_UTILS src/front/lexer.cpp src/front/parser.cpp)
-set(SRCS ${FRONTEND_UTILS} src/main.cpp src/utils.cpp)
+set(SRCS ${FRONTEND_UTILS} ${X86_SRCS} src/main.cpp src/utils.cpp)
 
 add_executable(bhc ${SRCS})
