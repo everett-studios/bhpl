@@ -4,9 +4,13 @@
 
 #include "include/utils.hpp"
 
+#include "front/include/lexer.hpp"
+
 int main(int argc, char *argv[]) {
   std::string src = Utilities::readSrc("examples/add.bhpl");
-  std::cout << src << std::endl;
+
+  auto *lexer = new Frontend::Lexer(src);
+  std::vector<Token> tokens = lexer->getTokens();
 
   return 0;
 }
