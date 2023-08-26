@@ -25,3 +25,15 @@ std::string Utilities::readSrc(std::string filepath) {
   file.close();
   return src;
 }
+
+void Utilities::writeBinaryFile(std::string filepath, std::string byteStr) {
+  std::ofstream file(filepath);
+
+  if (!file.is_open()) {
+    std::cout << "ERROR: Can't write file to path \"" + filepath + "\"!" << std::endl;
+    exit(1);
+  }
+
+  file << byteStr;
+  file.close();
+}

@@ -3,5 +3,4 @@
 .global entry
 
 entry:
-  movq $0, %rbx
-  ret
+  movl $666, %edx

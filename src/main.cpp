@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
   auto tree = parser->getTree();
 
   auto *ctx = new Codegen::X86Context(tree);
+  ctx->emit();
 
   return 0;
 }
