@@ -8,6 +8,7 @@
 #include "front/include/lexer.hpp"
 
 #include "codegen/x86_64/include/x86_64_context.hpp"
+#include "linker/windows/include/linker.hpp"
 
 int main(int argc, char *argv[]) {
   std::string src = Utilities::readSrc("examples/add.bhpl");
@@ -19,7 +20,9 @@ int main(int argc, char *argv[]) {
   auto tree = parser->getTree();
 
   auto *ctx = new Codegen::X86Context(tree);
-  ctx->emit();
+  std::string obj = ctx->emit();
+
+  Linker::linkPE(obj, "test2.exe");
 
   return 0;
 }

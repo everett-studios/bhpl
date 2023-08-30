@@ -34,9 +34,9 @@ X86Context::X86Context(Frontend::Node ast) {
   variable();
 }
 
-void X86Context::emit() {
+std::string X86Context::emit() {
   std::string bytes = writer->getBuffer();
-  Utilities::writeBinaryFile("test.o", bytes);
+  return bytes;
 }
 
 } // Codegen
