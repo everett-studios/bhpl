@@ -4,7 +4,12 @@
 #include <sstream>
 #include <bitset>
 #include <vector>
-#include <intrin.h>
+
+#ifdef _WIN32
+  #include <intrin.h>
+#elif __unix
+  #include <byteswap.h>
+#endif
 
 #include "include/writer.hpp"
 
@@ -19,7 +24,13 @@ std::string X86Writer::i32ToHex(uint32_t val) {
 
   // convert to little endian
   unsigned short littleEndian = 0;
-  littleEndian = _byteswap_ushort(val);
+
+  #ifdef _WIN32
+    littleEndian = _byteswap_ushort(val);
+  #elif __unix__
+    littleEndian = bswap_16(val);
+  #endif
+  
   std::bitset<16> bits{littleEndian};
 
   // convert to hexadecimal

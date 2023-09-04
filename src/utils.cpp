@@ -26,14 +26,14 @@ std::string Utilities::readSrc(std::string filepath) {
   return src;
 }
 
-void Utilities::writeBinaryFile(std::string filepath, int bytes[]) {
-  std::ofstream file(filepath, std::ios::out | std::ios::binary);
+void Utilities::writeBinaryFile(std::string filepath, std::string bytes) {
+  std::ofstream file(filepath);
 
   if (!file.is_open()) {
     std::cout << "ERROR: Can't write file to path \"" + filepath + "\"!" << std::endl;
     exit(1);
   }
 
-  file.write(reinterpret_cast<const char*>(bytes), sizeof(bytes));
+  file << bytes;
   file.close();
 }
