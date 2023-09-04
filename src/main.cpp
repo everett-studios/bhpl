@@ -24,6 +24,12 @@ int main(int argc, char *argv[]) {
   char *obj = ctx->emit();
 
   // execute
+
+  if (mprotect(obj, 4096, PROT_READ | PROT_EXEC) == -1) {
+    std::cout << "ERROR: Failed to call 'mprotect'!" << std::endl;
+    return -1;
+  }
+
   void (*func)();
   func = (void (*)()) obj;
   func();
