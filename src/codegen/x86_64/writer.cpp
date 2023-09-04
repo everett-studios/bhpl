@@ -17,7 +17,7 @@
 namespace Codegen {
 
 X86Writer::X86Writer() {
-  buffer = (int*)mmap(NULL, 4096, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+  buffer = (char*)mmap(NULL, 4096, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
   bufIdx = 0;
 
   if (buffer == MAP_FAILED) {
@@ -61,11 +61,28 @@ void X86Writer::i32ToHex(uint32_t val) {
 }
 
 void X86Writer::movl(Codegen::X86Register reg, uint32_t val) {
-  buffer[bufIdx++] = 0xb8; // movl, width, eax
+  buffer[bufIdx++] = 0xba; // movl %edx
   i32ToHex(val); // little endian hex value of value provided
 }
 
-int *X86Writer::getBuffer() {
+void X86Writer::exitProg() {
+  buffer[bufIdx++] = 0xb8; // movl %eax
+  buffer[bufIdx++] = 0x01; // sys_exit
+  buffer[bufIdx++] = 0x00; // padding
+  buffer[bufIdx++] = 0x00; // padding
+  buffer[bufIdx++] = 0x00; // padding
+
+  buffer[bufIdx++] = 0xbb; // movl %ebx
+  buffer[bufIdx++] = 0x00; // exit code 0
+  buffer[bufIdx++] = 0x00; // padding
+  buffer[bufIdx++] = 0x00; // padding
+  buffer[bufIdx++] = 0x00; // padding
+
+  buffer[bufIdx++] = 0xcd; // int
+  buffer[bufIdx++] = 0x80; // 0x80
+}
+
+char *X86Writer::getBuffer() {
   return buffer;
 }
 

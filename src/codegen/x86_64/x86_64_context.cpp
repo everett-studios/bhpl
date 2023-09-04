@@ -32,10 +32,11 @@ X86Context::X86Context(Frontend::Node ast) {
   writer = new X86Writer();
 
   variable();
+  writer->exitProg();
 }
 
-int *X86Context::emit() {
-  int *bytes = writer->getBuffer();
+char *X86Context::emit() {
+  char *bytes = writer->getBuffer();
   return bytes;
 }
 

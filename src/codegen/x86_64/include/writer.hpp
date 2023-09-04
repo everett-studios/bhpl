@@ -7,13 +7,15 @@
 namespace Codegen {
   class X86Writer {
   private:
-    int *buffer;
+    char *buffer;
     int bufIdx;
     void i32ToHex(uint32_t val);
   public:
     X86Writer();
 
     void movl(X86Register reg, uint32_t val);
-    int *getBuffer();
+    void exitProg();
+
+    char *getBuffer();
   };
 }

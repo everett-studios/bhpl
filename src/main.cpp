@@ -21,10 +21,14 @@ int main(int argc, char *argv[]) {
 
   // compile
   auto *ctx = new Codegen::X86Context(tree);
-  int *obj = ctx->emit();
+  char *obj = ctx->emit();
 
   // execute
-  munmap(obj, 4096);
+  void (*func)();
+  func = (void (*)()) obj;
+  func();
 
+  // release memory back to system
+  munmap(obj, 4096);
   return 0;
 }
