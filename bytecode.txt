@@ -1,0 +1,5 @@
+
+_entry:
+  pushv x
+  setvi32 x, 666
+  exit

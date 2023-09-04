@@ -2,12 +2,11 @@
 #include <iostream>
 #include <string>
 
-#include "../../include/utils.hpp"
-#include "include/x86_64_context.hpp"
+#include "include/generator.hpp"
 
-namespace Codegen {
+namespace Bytecode {
 
-void X86Context::variable() {
+void Generator::variable() {
   if (currentNode.name == "=") {
     if (currentNode.tknChildren[0].name == "$PT_TYPE") {
       // integer type
@@ -19,25 +18,27 @@ void X86Context::variable() {
         if (currentNode.children[0].name == "$P_VAR_VAL") {
           std::string val = currentNode.children[0].tknChildren[0].value;
           int intVal = std::stoi(val);
-          writer->movl(X86Register::EAX, intVal);
+
+          writer->pushv(varName);
+          writer->setvi32(varName, intVal);
         }
       }
     }
   }
 }
 
-X86Context::X86Context(Frontend::Node ast) {
+Generator::Generator(Frontend::Node ast) {
   this->ast = ast;
   currentNode = ast;
-  writer = new X86Writer();
+  writer = new Writer();
 
   variable();
-  writer->exitProg();
+  writer->exit();
 }
 
-char *X86Context::emit() {
-  char *bytes = writer->getBuffer();
+std::string Generator::emit() {
+  std::string bytes = writer->emit();
   return bytes;
 }
 
-} // Codegen
+} // Bytecode

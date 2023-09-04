@@ -2,7 +2,7 @@
 #pragma once
 
 #include <string>
-#include "../../../front/include/parser.hpp"
+#include "../../../bytecode/include/reader.hpp"
 #include "writer.hpp"
 
 namespace Codegen {
@@ -10,12 +10,11 @@ namespace Codegen {
 class X86Context {
 private:
   X86Writer *writer;
-  Frontend::Node ast;
-  Frontend::Node currentNode;
+  JIT::Reader *reader;
 
   void variable();
 public:
-  X86Context(Frontend::Node ast);
+  X86Context(std::string bytecode);
   char *emit();
 };
 

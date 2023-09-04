@@ -36,27 +36,33 @@ void X86Writer::i32ToHex(uint32_t val) {
     littleEndian = bswap_16(val);
   #endif
   
-  std::bitset<16> bits{littleEndian};
+  std::bitset<32> bits{littleEndian};
 
   // convert to hexadecimal
   std::stringstream result;
   result << std::hex << std::uppercase << bits.to_ulong();
   std::string hex = result.str();
 
+  if (hex.substr().length() == 1) {
+    hex = "0" + result.str();
+  }
+
   // add padding if needed
-  if ((hex.length() / 2) < 4) {
-    int diff = 4 - (hex.length() / 2);
+  if ((hex.length() / 2) < 3) {
+    int diff = 3 - (hex.length() / 2);
 
     for (int i = 0; i < diff; i++) {
       hex += "00";
     }
   }
 
+  // std::cout << hex << std::endl;
+
   // convert to usable byte string
   for (unsigned int i = 0; i < hex.length(); i += 2) {
     std::string byteString = hex.substr(i, 2);
     int byte = strtol(byteString.c_str(), nullptr, 16);
-    buffer[bufIdx++] += byte;
+    buffer[bufIdx++] = byte;
   }
 }
 
