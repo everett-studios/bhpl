@@ -8,6 +8,7 @@
 #ifdef _WIN32
   #include <intrin.h>
 #elif __unix
+  #include <sys/mman.h>
   #include <byteswap.h>
 #endif
 
@@ -16,12 +17,16 @@
 namespace Codegen {
 
 X86Writer::X86Writer() {
-  buffer = "";
+  buffer = (int*)mmap(NULL, 4096, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+  bufIdx = 0;
+
+  if (buffer == MAP_FAILED) {
+    std::cout << "ERROR: Failed to allocate memory for program!" << std::endl;
+    exit(1);
+  }
 }
 
-std::string X86Writer::i32ToHex(uint32_t val) {
-  std::string hexString;
-
+void X86Writer::i32ToHex(uint32_t val) {
   // convert to little endian
   unsigned short littleEndian = 0;
 
@@ -50,19 +55,17 @@ std::string X86Writer::i32ToHex(uint32_t val) {
   // convert to usable byte string
   for (unsigned int i = 0; i < hex.length(); i += 2) {
     std::string byteString = hex.substr(i, 2);
-    char byte = (char) strtol(byteString.c_str(), nullptr, 16);
-    hexString += byte;
+    int byte = strtol(byteString.c_str(), nullptr, 16);
+    buffer[bufIdx++] += byte;
   }
-
-  return hexString;
 }
 
 void X86Writer::movl(Codegen::X86Register reg, uint32_t val) {
-  buffer += "\xb8"; // movl, width, eax
-  buffer += i32ToHex(val); // little endian hex value of value provided
+  buffer[bufIdx++] = 0xb8; // movl, width, eax
+  i32ToHex(val); // little endian hex value of value provided
 }
 
-std::string X86Writer::getBuffer() {
+int *X86Writer::getBuffer() {
   return buffer;
 }
 

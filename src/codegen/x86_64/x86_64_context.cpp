@@ -34,8 +34,8 @@ X86Context::X86Context(Frontend::Node ast) {
   variable();
 }
 
-std::string X86Context::emit() {
-  std::string bytes = writer->getBuffer();
+int *X86Context::emit() {
+  int *bytes = writer->getBuffer();
   return bytes;
 }
 

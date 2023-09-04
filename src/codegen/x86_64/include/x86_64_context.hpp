@@ -16,7 +16,7 @@ private:
   void variable();
 public:
   X86Context(Frontend::Node ast);
-  std::string emit();
+  int *emit();
 };
 
 } // Codegen
