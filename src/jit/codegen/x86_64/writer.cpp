@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <algorithm>
 #include <bitset>
 #include <vector>
 
@@ -36,19 +37,19 @@ void X86Writer::i32ToHex(uint32_t val) {
     littleEndian = bswap_16(val);
   #endif
   
-  std::bitset<32> bits{littleEndian};
+  std::bitset<16> bits{littleEndian};
 
   // convert to hexadecimal
   std::stringstream result;
   result << std::hex << std::uppercase << bits.to_ulong();
   std::string hex = result.str();
 
-  if (hex.substr().length() == 1) {
-    hex = "0" + result.str();
-  }
+  // trim zeroes
+  // std::string trimmed = hex.erase(0, std::min(hex.find_first_not_of('0'), hex.size()-1));
+  // hex = trimmed;
 
   // add padding if needed
-  if ((hex.length() / 2) < 3) {
+  while ((hex.length() / 2) < 3) {
     int diff = 3 - (hex.length() / 2);
 
     for (int i = 0; i < diff; i++) {
@@ -56,11 +57,20 @@ void X86Writer::i32ToHex(uint32_t val) {
     }
   }
 
-  // std::cout << hex << std::endl;
+  while (hex.length() < 6) {
+    hex += '0';
+  }
 
   // convert to usable byte string
   for (unsigned int i = 0; i < hex.length(); i += 2) {
     std::string byteString = hex.substr(i, 2);
+    std::string copy = "  ";
+
+    copy[1] = byteString[0];
+    copy[0] = byteString[1];
+
+    byteString = copy;
+
     int byte = strtol(byteString.c_str(), nullptr, 16);
     buffer[bufIdx++] = byte;
   }
@@ -68,7 +78,7 @@ void X86Writer::i32ToHex(uint32_t val) {
 
 void X86Writer::movl(Codegen::X86Register reg, uint32_t val) {
   buffer[bufIdx++] = 0xba; // movl %edx
-  i32ToHex(val); // little endian hex value of value provided
+  i32ToHex(1); // little endian hex value of value provided
 }
 
 void X86Writer::exitProg() {
