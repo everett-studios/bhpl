@@ -14,7 +14,7 @@ private:
 
   void variable();
 public:
-  X86Context(std::string bytecode);
+  X86Context(int *bytecode);
   char *emit();
 };
 

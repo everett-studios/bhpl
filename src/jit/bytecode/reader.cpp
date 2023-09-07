@@ -7,27 +7,28 @@
 
 namespace JIT {
 
-Reader::Reader(std::string bytecode) {
+Reader::Reader(int *bytecode) {
   this->bytecode = bytecode;
   currentIdx = 0;
 }
 
 std::string Reader::nextInstr() {
   std::string instr;
+  int bytecodeLen = sizeof(bytecode)/sizeof(bytecode[0]);
 
-  while (currentIdx < bytecode.length() - 1 && bytecode[currentIdx] != '\x01') {
+  while (currentIdx < bytecodeLen - 1 && bytecode[currentIdx] != '\x01') {
     instr += bytecode[currentIdx];
     currentIdx++;
   }
 
   instr += bytecode[currentIdx];
-  currentIdx++;
+  currentIdx += 2;
 
   return instr;
 }
 
 bool Reader::done() {
-  return currentIdx == bytecode.length() - 1;
+  return currentIdx == sizeof(bytecode)/sizeof(bytecode[0]) - 1;
 }
 
 } // JIT

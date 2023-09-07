@@ -4,9 +4,7 @@
 #include <sys/mman.h>
 
 #include "include/utils.hpp"
-
 #include "bytecode/generator/include/generator.hpp"
-#include "jit/codegen/x86_64/include/x86_64_context.hpp"
 
 int main(int argc, char *argv[]) {
   std::string src = Utilities::readSrc("examples/add.bhpl");
@@ -21,21 +19,5 @@ int main(int argc, char *argv[]) {
   auto *bytecodeGenerator = new Bytecode::Generator(tree);
   std::string bytecode = bytecodeGenerator->emit();
 
-  auto *ctx = new Codegen::X86Context(bytecode);
-  char *obj = ctx->emit();
-
-  // execute
-
-  if (mprotect(obj, 4096, PROT_READ | PROT_EXEC) == -1) {
-    std::cout << "ERROR: Failed to call 'mprotect'!" << std::endl;
-    return -1;
-  }
-
-  void (*func)();
-  func = (void (*)()) obj;
-  func();
-
-  // release memory back to system
-  munmap(obj, 4096);
   return 0;
 }

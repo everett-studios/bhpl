@@ -26,7 +26,7 @@ void X86Context::variable() {
       setvi32 = reader->nextInstr();
     }
 
-    if (setvi32 != "" && setvi32[0] == '\x6a') {
+    if (setvi32.length() > 0 && setvi32[0] == '\x6a') {
       std::string val = std::to_string(setvi32[2]); // HACK: HARDCODED!
       int intVal = std::stoi(val);
       writer->movl(X86Register::EAX, intVal);
@@ -34,7 +34,7 @@ void X86Context::variable() {
   }
 }
 
-X86Context::X86Context(std::string bytecode) {
+X86Context::X86Context(int *bytecode) {
   reader = new JIT::Reader(bytecode);
   writer = new X86Writer();
 

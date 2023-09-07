@@ -4,10 +4,10 @@
 namespace JIT {
   class Reader {
   private:
-    std::string bytecode;
+    int *bytecode;
     int currentIdx;
   public:
-    Reader(std::string bytecode);
+    Reader(int *bytecode);
     std::string nextInstr();
     bool done();
   };
