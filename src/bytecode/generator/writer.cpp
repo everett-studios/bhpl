@@ -12,28 +12,40 @@ Writer::Writer() {
 }
 
 void Writer::pushv(std::string name) {
-  bytes += "\x6b"; // pushv
-  bytes += name; // variable name
-  bytes += "\x01"; // endinstr
+  bytes += "6b"; // pushv
+
+  for (auto &chr : name) {
+    std::stringstream ss;
+    int ascii = int(chr); // variable name
+    ss << std::hex << ascii;
+    bytes += ss.str();
+  }
+
+  bytes += "01"; // endinstr
 }
 
 void Writer::setvi32(std::string name, int val) {
-  bytes += "\x6a"; // setvi32
-  bytes += name; // variable name
+  bytes += "6a"; // setvi32
+
+  for (auto &chr : name) {
+    std::stringstream ss;
+    int ascii = int(chr); // variable name
+    ss << std::hex << ascii;
+    bytes += ss.str();
+  }
 
   std::stringstream hex;
   hex << std::hex << std::uppercase << val;
 
   std::string valString = hex.str().substr(0, 2);
-  int num = strtol(valString.c_str(), nullptr, 16);
+  bytes += valString;
 
-  bytes += "\x01";
-  bytes += "\x01"; // endinstr
+  bytes += "01"; // endinstr
 }
 
 void Writer::exit() {
-  bytes += "\x9a"; // exit
-  bytes += "\x01"; // endinstr
+  bytes += "9a"; // exit
+  bytes += "01"; // endinstr
 }
 
 std::string Writer::emit() {

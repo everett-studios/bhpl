@@ -8,4 +8,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(SRCS ../utils.cpp bytecode/reader.cpp codegen/x86_64/x86_64_context.cpp codegen/x86_64/runtime.cpp codegen/x86_64/writer.cpp)
 
 add_library(bhcrt ${SRCS})
-target_link_libraries(bhcrt -static -static-libgcc -static-libstdc++)
+target_link_libraries(bhcrt stdc++)

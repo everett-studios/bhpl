@@ -37,3 +37,7 @@ void Utilities::writeBinaryFile(std::string filepath, std::string bytes) {
   file << bytes;
   file.close();
 }
+
+void Utilities::writeTextFile(std::string filepath, std::string text) {
+  writeBinaryFile(filepath, text);
+}

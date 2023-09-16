@@ -23,6 +23,7 @@ void X86Context::variable() {
     std::string setvi32;
 
     if (!reader->done()) {
+      // reader->currentIdx++;
       setvi32 = reader->nextInstr();
     }
 

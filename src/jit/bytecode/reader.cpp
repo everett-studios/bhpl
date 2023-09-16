@@ -16,13 +16,13 @@ std::string Reader::nextInstr() {
   std::string instr;
   int bytecodeLen = sizeof(bytecode)/sizeof(bytecode[0]);
 
-  while (currentIdx < bytecodeLen - 1 && bytecode[currentIdx] != '\x01') {
+  while (bytecode[currentIdx] != '\x01') {
     instr += bytecode[currentIdx];
     currentIdx++;
   }
 
   instr += bytecode[currentIdx];
-  currentIdx += 2;
+  currentIdx++;
 
   return instr;
 }

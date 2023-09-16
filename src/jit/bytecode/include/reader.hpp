@@ -5,8 +5,9 @@ namespace JIT {
   class Reader {
   private:
     int *bytecode;
-    int currentIdx;
   public:
+    int currentIdx;
+
     Reader(int *bytecode);
     std::string nextInstr();
     bool done();
