@@ -4,7 +4,7 @@ WIP
 
 ## **To Do**
 
-- [ ] actual bytecode
+- [x] actual bytecode
 - [ ] clean up code
 - [ ] organize code more
 - [ ] cross platform support
