@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
   system("gcc tmp.o -o add -L. -lbhcrt -lstdc++ -static");
 
   std::filesystem::remove("runtime.h");
-  std::filesystem::remove("tmp.c");
+  // std::filesystem::remove("tmp.c");
   std::filesystem::remove("tmp.o");
   std::filesystem::remove("libbhcrt.a");
 

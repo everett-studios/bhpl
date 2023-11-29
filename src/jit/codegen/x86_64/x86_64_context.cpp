@@ -1,6 +1,8 @@
 
 #include <iostream>
 #include <string>
+#include <bitset>
+#include <vector>
 #include <iomanip>
 
 #include "../../../include/utils.hpp"
@@ -17,20 +19,31 @@ void X86Context::variable() {
 
   if (pushv != "" && pushv[0] == '\x6b') {
     // get name
-    std::string varName = std::to_string(pushv[1]); // TODO: actually loop through this
+    std::string varName = ""; // TODO: actually loop through this
+    int varIdx = 1;
+
+    while (varIdx < varName.length() - 1 && varName[varIdx] != '\x01') {
+      varName += std::to_string(varName[varIdx]);
+      varIdx++;
+    }
 
     // get value
     std::string setvi32;
 
     if (!reader->done()) {
-      // reader->currentIdx++;
       setvi32 = reader->nextInstr();
     }
 
     if (setvi32.length() > 0 && setvi32[0] == '\x6a') {
-      std::string val = std::to_string(setvi32[2]); // HACK: HARDCODED!
-      int intVal = std::stoi(val);
-      writer->movl(X86Register::EAX, intVal);
+      std::vector<int> val = {};
+      int idx = 2;
+
+      while (idx < setvi32.length() - 1 && setvi32[idx] != '\x01') {
+        val.push_back(setvi32[idx]);
+        idx++;
+      }
+
+      writer->movl(X86Register::EAX, val[0]);
     }
   }
 }
